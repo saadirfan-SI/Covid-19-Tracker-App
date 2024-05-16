@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,7 +16,52 @@
         android:theme="@style/Theme.CovidApp"
         tools:targetApi="31">
         <activity
+            android:name=".ActivitySettings"
+            android:exported="false" />
+        <activity
+            android:name=".ActivityEmergency"
+            android:exported="false" />
+        <activity
+            android:name=".ActivityMaps"
+            android:exported="false" />
+        <activity
+            android:name=".ActivityAdvice"
+            android:exported="false" />
+        <activity
+            android:name=".ActivityInbox"
+            android:exported="false" />
+        <activity
+            android:name=".ActivityNotifications"
+            android:exported="false" />
+        <activity
+            android:name=".ActivityStats"
+            android:exported="false" />
+        <activity
+            android:name=".ActivityNews"
+            android:exported="false" />
+        <activity
+            android:name=".ActivityCalendar"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ActivitySignUp"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ActivityDashboard"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

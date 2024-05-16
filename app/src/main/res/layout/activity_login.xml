@@ -70,7 +70,7 @@
                 android:textColorHint="#756C6C" />
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/imageView2Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -116,22 +116,22 @@
                     android:text="Facebook"
                     android:textColor="#3b608c"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:onClick="ActivityDashboard"/>
 
             </LinearLayout>
 
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_height="77dp"
+                android:layout_marginTop="16dp"
+                android:clickable="true"
                 android:text="Are You A New User? Register Here"
                 android:textAlignment="center"
                 android:textColor="#3B608C"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:onClick="onRegisterClicked"
-                android:clickable="true"/>
+                android:textSize="26sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
     </ScrollView>
