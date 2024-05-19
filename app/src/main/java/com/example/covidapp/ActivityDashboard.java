@@ -16,6 +16,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class ActivityDashboard extends AppCompatActivity {
 
+    private static final int REQUEST_LOCATION_PERMISSION = 1;
+    private static final int REQUEST_CHECK_SETTINGS = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +49,7 @@ public class ActivityDashboard extends AppCompatActivity {
             }
         });
 
-        // Notifications
+// Notification
         // This code block is for the "notifications" image that, when clicked takes you to the
         // notification activity page
         ImageView imgNotification = findViewById(R.id.imageViewNotification);
@@ -71,6 +74,7 @@ public class ActivityDashboard extends AppCompatActivity {
             }
         });
 
+// Search bar
     // This code block is for the search bar and the search icon
         // Initialize the search EditText by finding its view using its ID
         EditText searchEditText = findViewById(R.id.editTextTextSearch);
@@ -139,7 +143,7 @@ public class ActivityDashboard extends AppCompatActivity {
         });
 
 
-        // Advice
+// Advice
         // This code block is for the "advice" image that, when clicked takes you to the advice
         // activity page
         ImageView imgAdvice = findViewById(R.id.imageView6);
@@ -164,32 +168,58 @@ public class ActivityDashboard extends AppCompatActivity {
             }
         });
 
-        // Maps
-        // This code block is for the "maps" image that, when clicked takes you to the maps
-        // activity page
+// Maps
+        // This code block is for the "maps" image that, when clicked, shows nearby health facilities
         ImageView imgMaps = findViewById(R.id.imageViewMaps);
         imgMaps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("ActivityDashboard", "Maps image clicked");
-                Intent toMapsPage = new Intent(ActivityDashboard.this, ActivityMaps.class);
-                startActivity(toMapsPage);
+
+                // Intent to open Google Maps with a search query for nearby health facilities
+                Uri gmmIntentUri = Uri.parse("geo:0,0?q=health+facilities+near+me");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+
+                // Check if there is an app that can handle the intent
+                if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                } else {
+                    // Fallback to open in a web browser
+                    Uri webUri = Uri.parse("https://www.google.com/maps/search/?api=1&query=health+facilities+near+me");
+                    Intent webIntent = new Intent(Intent.ACTION_VIEW, webUri);
+                    startActivity(webIntent);
+                }
             }
         });
 
-        // This code block is for the "maps" text that, when clicked takes you to the maps
-        // activity page
+
+
         TextView txtMaps = findViewById(R.id.textViewMaps);
         txtMaps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("ActivityDashboard", "Maps text clicked");
-                Intent toMapsPage2 = new Intent(ActivityDashboard.this, ActivityMaps.class);
-                startActivity(toMapsPage2);
+
+                // Intent to open Google Maps with a search query for nearby health facilities
+                Uri gmmIntentUri = Uri.parse("geo:0,0?q=health+facilities+near+me");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+
+                // Check if there is an app that can handle the intent
+                if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                } else {
+                    // Fallback to open in a web browser
+                    Uri webUri = Uri.parse("https://www.google.com/maps/search/?api=1&query=health+facilities+near+me");
+                    Intent webIntent = new Intent(Intent.ACTION_VIEW, webUri);
+                    startActivity(webIntent);
+                }
             }
         });
 
-        // Inbox
+
+// Inbox
         // This code block is for the "inbox" image that, when clicked takes you to the inbox
         // activity page
         ImageView imgInbox = findViewById(R.id.imageViewInbox);
@@ -214,7 +244,7 @@ public class ActivityDashboard extends AppCompatActivity {
             }
         });
 
-        // Stats
+// Stats
         // This code block is for the "stats" image that, when clicked takes you to the stats
         // activity page
         ImageView imgStats = findViewById(R.id.imageViewStats);
@@ -239,7 +269,7 @@ public class ActivityDashboard extends AppCompatActivity {
             }
         });
 
-        // Calendar
+// Calendar
         // This code block is for the "calendar" image that, when clicked takes you to the
         // calendar activity page
         ImageView imgCalendar = findViewById(R.id.imageViewCalendar);
@@ -264,7 +294,7 @@ public class ActivityDashboard extends AppCompatActivity {
             }
         });
 
-        // Settings
+//Settings
         // This code block is for the "settings" image that, when clicked takes you to the
         // settings activity page
         ImageView imgSettings = findViewById(R.id.imageViewSettings1);
@@ -289,7 +319,7 @@ public class ActivityDashboard extends AppCompatActivity {
             }
         });
 
-        // Emergency
+// Emergency
         // This code block is for the "emergency" image that, when clicked takes you to the
         // emergency activity page
         ImageView imgEmergency = findViewById(R.id.imageViewEmergency);
