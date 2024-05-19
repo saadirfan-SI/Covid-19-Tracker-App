@@ -3,8 +3,12 @@ package com.example.covidapp;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -66,6 +70,74 @@ public class ActivityDashboard extends AppCompatActivity {
                 startActivity(toNotificationPage2);
             }
         });
+
+    // This code block is for the search bar and the search icon
+        // Initialize the search EditText by finding its view using its ID
+        EditText searchEditText = findViewById(R.id.editTextTextSearch);
+
+        // Set OnFocusChangeListener on the EditText to handle focus change events
+        searchEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                // Check if the EditText has gained focus and its text is "Search"
+                if (hasFocus && searchEditText.getText().toString().equals("Search")) {
+                    // Clear the text if it is "Search"
+                    searchEditText.setText("");
+                }
+                // Check if the EditText has lost focus and its text is empty
+                else if (!hasFocus && searchEditText.getText().toString().isEmpty()) {
+                    // Set the text to "Search" if it is empty
+                    searchEditText.setText("Search");
+                }
+            }
+        });
+
+
+        // A TextWatcher to handle placeholder text when the text changes or if text is pasted into
+        // the search bar
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            // This method is called to notify you that somewhere within s, the text is about to be replaced with new text with a different length.
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            // This method is called to notify you that somewhere within s, the text has been replaced with new text with a different length.
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            // This method is called to notify you that somewhere within s, the text has been changed.
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        // Set OnTouchListener on the EditText to handle touch events
+        searchEditText.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // Check if the touch event is an "UP" action (i.e., the user lifted their finger)
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    // Check if the touch event occurred within the drawable area of the EditText
+                    if (event.getRawX() >= (searchEditText.getRight() - searchEditText.getCompoundDrawables()[2].getBounds().width())) {
+                        // Retrieve the text from the EditText
+                        String query = searchEditText.getText().toString();
+                        // Check if the text is not equal to "Search" and is not empty
+                        if (!query.equals("Search") && !query.isEmpty()) {
+                            // Create an Intent to open a web browser with a Google search URL based on the query
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/search?q=" + query));
+                            // Start the activity (open the web browser with the search query)
+                            startActivity(intent);
+                        }
+                        // Return true to indicate that the touch event has been consumed
+                        return true;
+                    }
+                }
+                // Return false to indicate that the touch event has not been consumed
+                return false;
+            }
+        });
+
 
         // Advice
         // This code block is for the "advice" image that, when clicked takes you to the advice
