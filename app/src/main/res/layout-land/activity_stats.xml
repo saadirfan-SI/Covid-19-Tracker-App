@@ -5,13 +5,13 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#513F51B5"
     android:orientation="vertical"
     android:padding="16dp">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#11FA0606"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,14 +30,14 @@
 
                 <ImageView
                     android:id="@+id/imageView"
-                    android:layout_width="400dp"
-                    android:layout_height="245dp"
+                    android:layout_width="697dp"
+                    android:layout_height="281dp"
+                    android:background="#E6F48236"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0"
+                    app:layout_constraintVertical_bias="1.0"
                     app:srcCompat="@drawable/top_background" />
 
                 <TextView
@@ -56,86 +56,93 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="340dp"
-                android:layout_height="90dp"
+                android:layout_width="626dp"
+                android:layout_height="71dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:background="@drawable/background_banner">
 
                 <ImageView
-                    android:id="@+id/imageView5"
-                    android:layout_width="98dp"
-                    android:layout_height="92dp"
-                    android:background="#B5CC846E"
+                    android:id="@+id/imageView9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:srcCompat="@drawable/totalcases" />
+                    app:srcCompat="@drawable/totalcases"
+                    tools:layout_editor_absoluteY="0dp" />
 
                 <TextView
                     android:id="@+id/tvTotalCases"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="80dp"
                     android:text="Total Cases: "
                     android:textColor="#db0b0b"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.489" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="340dp"
-                android:layout_height="86dp"
+                android:layout_width="626dp"
+                android:layout_height="70dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:background="@drawable/background_banner">
+
+                <ImageView
+                    android:id="@+id/imageView10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:srcCompat="@drawable/deathcases"
+                    tools:layout_editor_absoluteY="0dp" />
 
                 <TextView
                     android:id="@+id/tvTotalDeaths"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="80dp"
                     android:text="Total Deaths: "
                     android:textColor="#db0b0b"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/imageView7"
-                    android:layout_width="88dp"
-                    android:layout_height="86dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:srcCompat="@drawable/deathcases"
-                    tools:layout_editor_absoluteY="0dp" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.413" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="340dp"
-                android:layout_height="87dp"
+                android:layout_width="626dp"
+                android:layout_height="80dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:background="@drawable/background_banner">
 
+                <ImageView
+                    android:id="@+id/imageView11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:srcCompat="@drawable/tests" />
+
                 <TextView
                     android:id="@+id/tvTotalTests"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="80dp"
                     android:text="Total Tests: "
                     android:textColor="#db0b0b"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/imageView8"
-                    android:layout_width="80dp"
-                    android:layout_height="89dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:srcCompat="@drawable/tests" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
