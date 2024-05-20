@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -145,7 +146,7 @@ public class ActivityDashboard extends AppCompatActivity {
 
 // Advice
         // This code block is for the "advice" image which, when clicked, takes you to the advice
-        // activity page
+        // section of the NHS website
         ImageView imgAdvice = findViewById(R.id.imageView6);
         imgAdvice.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,7 +172,7 @@ public class ActivityDashboard extends AppCompatActivity {
         });
 
         // This code block is for the "advice" text which, when clicked, takes you to the advice
-        // activity page
+        // section of the NHS website
         TextView txtAdvice = findViewById(R.id.textViewCovidAdvice);
         txtAdvice.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -298,16 +299,22 @@ public class ActivityDashboard extends AppCompatActivity {
             }
         });
 
-// Calendar
-        // This code block is for the "calendar" image which, when clicked, takes you to the
-        // calendar activity page
         ImageView imgCalendar = findViewById(R.id.imageViewCalendar);
         imgCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("ActivityDashboard", "Calendar image clicked");
-                Intent toCalendarPage = new Intent(ActivityDashboard.this, ActivityCalendar.class);
-                startActivity(toCalendarPage);
+
+                // Intent to open the phone's built-in calendar app
+                Intent calendarIntent = new Intent(Intent.ACTION_MAIN);
+                calendarIntent.addCategory(Intent.CATEGORY_APP_CALENDAR);
+
+                try {
+                    startActivity(calendarIntent);
+                } catch (ActivityNotFoundException e) {
+                    Log.e("ActivityDashboard", "No calendar app found", e);
+                    Toast.makeText(ActivityDashboard.this, "No calendar app found", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -350,7 +357,7 @@ public class ActivityDashboard extends AppCompatActivity {
 
 // Emergency
         // This code block is for the "emergency" image which, when clicked, takes you to the
-        // emergency activity page
+        // phone's call manager to call 999
         ImageView imgEmergency = findViewById(R.id.imageViewEmergency);
         imgEmergency.setOnClickListener(new View.OnClickListener() {
             @Override
