@@ -54,7 +54,20 @@
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView"
                     app:layout_constraintStart_toStartOf="@+id/imageView"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.435" />
+
+                <Button
+                    android:id="@+id/buttonQuarantine"
+                    android:layout_width="241dp"
+                    android:layout_height="40dp"
+                    android:text="Click Here if Covid Positive"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                    app:layout_constraintEnd_toEndOf="@+id/imageView"
+                    app:layout_constraintHorizontal_bias="0.359"
+                    app:layout_constraintStart_toStartOf="@+id/imageView"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.677" />
 
                 <LinearLayout
                     android:layout_width="326dp"

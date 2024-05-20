@@ -1,20 +1,25 @@
 package com.example.covidapp;
 
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Calendar;
 
 
 public class ActivityDashboard extends AppCompatActivity {
@@ -299,6 +304,9 @@ public class ActivityDashboard extends AppCompatActivity {
             }
         });
 
+// Calendar
+        // This code block is for the "calendar" text image, when clicked, takes you to your phone's
+        // in built calendar app
         ImageView imgCalendar = findViewById(R.id.imageViewCalendar);
         imgCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -318,8 +326,10 @@ public class ActivityDashboard extends AppCompatActivity {
             }
         });
 
-        // This code block is for the "calendar" text which, when clicked, takes you to the
-        // calendar activity page
+
+
+        // This code block is for the "calendar" text which, when clicked, takes you to your phone's
+        // in built calendar app
         TextView txtCalendar = findViewById(R.id.textViewCalendar);
         txtCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -383,8 +393,41 @@ public class ActivityDashboard extends AppCompatActivity {
                 startActivity(dialIntent);
             }
         });
-    }
 
+
+    // Start Quarantine
+    Button buttonStartQuarantine = findViewById(R.id.buttonQuarantine);
+        buttonStartQuarantine.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Log.d("ActivityDashboard", "Start Quarantine button clicked");
+            startQuarantinePeriod();
+        }
+    });
+}
+
+private void startQuarantinePeriod() {
+    Calendar startDate = Calendar.getInstance();
+    Calendar endDate = Calendar.getInstance();
+    endDate.add(Calendar.DAY_OF_YEAR, 14); // Add 14 days to start date
+
+    // Create an intent to insert an event
+    Intent intent = new Intent(Intent.ACTION_INSERT)
+            .setData(CalendarContract.Events.CONTENT_URI)
+            .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startDate.getTimeInMillis())
+            .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endDate.getTimeInMillis())
+            .putExtra(CalendarContract.Events.TITLE, "Quarantine Period")
+            .putExtra(CalendarContract.Events.DESCRIPTION, "14-day quarantine period")
+            .putExtra(CalendarContract.Events.EVENT_LOCATION, "Home")
+            .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY);
+
+    try {
+        startActivity(intent);
+    } catch (ActivityNotFoundException e) {
+        Log.e("ActivityDashboard", "No calendar app found", e);
+        Toast.makeText(ActivityDashboard.this, "No calendar app found", Toast.LENGTH_SHORT).show();
+    }
+}
 
 
 }
