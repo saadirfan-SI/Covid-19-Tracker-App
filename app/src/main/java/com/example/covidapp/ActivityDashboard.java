@@ -1,7 +1,9 @@
 package com.example.covidapp;
 
-import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,16 +21,27 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Calendar;
 
 
 public class ActivityDashboard extends AppCompatActivity {
 
+    public static final int QUARANTINE_DAYS = 14;
+    public static final int DAILY_REMINDER_REQUEST_CODE = 100;
+    public static final int END_QUARANTINE_REQUEST_CODE = 101;
+
+    private boolean isQuarantineStarted = false;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+
+        if (savedInstanceState != null) {
+            isQuarantineStarted = savedInstanceState.getBoolean("isQuarantineStarted", false);
+        }
 
 // News
         // This code block is for the "news" image which, when clicked, takes you to the news
@@ -81,7 +94,7 @@ public class ActivityDashboard extends AppCompatActivity {
         });
 
 // Search bar
-    // This code block is for the search bar and the search icon
+        // This code block is for the search bar and the search icon
         // Initialize the search EditText by finding its view using its ID
         EditText searchEditText = findViewById(R.id.editTextTextSearch);
 
@@ -229,7 +242,6 @@ public class ActivityDashboard extends AppCompatActivity {
         });
 
 
-
         TextView txtMaps = findViewById(R.id.textViewMaps);
         txtMaps.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -327,7 +339,6 @@ public class ActivityDashboard extends AppCompatActivity {
         });
 
 
-
         // This code block is for the "calendar" text which, when clicked, takes you to your phone's
         // in built calendar app
         TextView txtCalendar = findViewById(R.id.textViewCalendar);
@@ -337,6 +348,19 @@ public class ActivityDashboard extends AppCompatActivity {
                 Log.d("ActivityDashboard", "Calendar text clicked");
                 Intent toCalendarPage2 = new Intent(ActivityDashboard.this, ActivityCalendar.class);
                 startActivity(toCalendarPage2);
+            }
+        });
+
+        // Start Quarantine
+        Button buttonStartQuarantine = findViewById(R.id.buttonQuarantine);
+        buttonStartQuarantine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("ActivityDashboard", "Start Quarantine button clicked");
+                startQuarantinePeriod();
+                scheduleDailyReminders();
+                scheduleEndOfQuarantineReminder();
+                isQuarantineStarted = true;
             }
         });
 
@@ -393,41 +417,76 @@ public class ActivityDashboard extends AppCompatActivity {
                 startActivity(dialIntent);
             }
         });
-
-
-    // Start Quarantine
-    Button buttonStartQuarantine = findViewById(R.id.buttonQuarantine);
-        buttonStartQuarantine.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Log.d("ActivityDashboard", "Start Quarantine button clicked");
-            startQuarantinePeriod();
-        }
-    });
-}
-
-private void startQuarantinePeriod() {
-    Calendar startDate = Calendar.getInstance();
-    Calendar endDate = Calendar.getInstance();
-    endDate.add(Calendar.DAY_OF_YEAR, 14); // Add 14 days to start date
-
-    // Create an intent to insert an event
-    Intent intent = new Intent(Intent.ACTION_INSERT)
-            .setData(CalendarContract.Events.CONTENT_URI)
-            .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startDate.getTimeInMillis())
-            .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endDate.getTimeInMillis())
-            .putExtra(CalendarContract.Events.TITLE, "Quarantine Period")
-            .putExtra(CalendarContract.Events.DESCRIPTION, "14-day quarantine period")
-            .putExtra(CalendarContract.Events.EVENT_LOCATION, "Home")
-            .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY);
-
-    try {
-        startActivity(intent);
-    } catch (ActivityNotFoundException e) {
-        Log.e("ActivityDashboard", "No calendar app found", e);
-        Toast.makeText(ActivityDashboard.this, "No calendar app found", Toast.LENGTH_SHORT).show();
     }
+
+    private void startQuarantinePeriod() {
+        Calendar startDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance();
+        endDate.add(Calendar.DAY_OF_YEAR, QUARANTINE_DAYS); // Add 14 days to start date
+
+        // Create an intent to insert an event
+        Intent intent = new Intent(Intent.ACTION_INSERT)
+                .setData(CalendarContract.Events.CONTENT_URI)
+                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startDate.getTimeInMillis())
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endDate.getTimeInMillis())
+                .putExtra(CalendarContract.Events.TITLE, "Quarantine Period")
+                .putExtra(CalendarContract.Events.DESCRIPTION, "14-day quarantine period")
+                .putExtra(CalendarContract.Events.EVENT_LOCATION, "Home")
+                .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY);
+
+        try {
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Log.e("ActivityDashboard", "No calendar app found", e);
+            Toast.makeText(ActivityDashboard.this, "No calendar app found", Toast.LENGTH_SHORT).show();
+        }
+        // Notify that quarantine has started
+        Toast.makeText(this, "Quarantine has started. Notifications scheduled.", Toast.LENGTH_SHORT).show();
+    }
+
+    private void scheduleDailyReminders() {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 9); // Set the time to 9 AM
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        for (int i = 0; i < QUARANTINE_DAYS; i++) {
+            Intent intent = new Intent(this, QuarantineNotificationReceiver.class);
+            intent.putExtra("days_left", QUARANTINE_DAYS - i);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, DAILY_REMINDER_REQUEST_CODE + i, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+        }
+    }
+
+    private void scheduleEndOfQuarantineReminder() {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.add(Calendar.DAY_OF_YEAR, QUARANTINE_DAYS);
+        calendar.set(Calendar.HOUR_OF_DAY, 9); // Set the time to 9 AM
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        Intent intent = new Intent(this, EndQuarantineNotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, END_QUARANTINE_REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("isQuarantineStarted", isQuarantineStarted);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        isQuarantineStarted = savedInstanceState.getBoolean("isQuarantineStarted", false);
+    }
+
 }
 
 
-}

@@ -27,26 +27,32 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // This code block is for the button that takes you to the main dashboard screen
-        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) ImageView imgButtonToDashboard = findViewById(R.id.imageView2Button);
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"})
+        ImageView imgButtonToDashboard = findViewById(R.id.imageView2Button);
+
+// Set onClickListener for the button
         imgButtonToDashboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent goToSignUpPage = new Intent(MainActivity.this,ActivityDashboard.class);
+                // Create an Intent to navigate to the ActivityDashboard
+                Intent goToSignUpPage = new Intent(MainActivity.this, ActivityDashboard.class);
+                // Start the ActivityDashboard
                 startActivity(goToSignUpPage);
             }
         });
 
         // This code block is for the text that, when clicked, takes you to the create account page
         TextView txt = findViewById(R.id.textView2);
+
+// Set onClickListener for the text
         txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent goToSignUpPage = new Intent(MainActivity.this,ActivitySignUp.class);
+                // Create an Intent to navigate to the ActivitySignUp
+                Intent goToSignUpPage = new Intent(MainActivity.this, ActivitySignUp.class);
+                // Start the ActivitySignUp
                 startActivity(goToSignUpPage);
             }
         });
-
-
-
     }
 }
