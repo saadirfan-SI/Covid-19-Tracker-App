@@ -10,6 +10,9 @@ import android.content.Intent;
 import android.os.Build;
 import androidx.core.app.NotificationCompat;
 
+// This class handles the notification when quarantine ends but i have not tested it out as it has
+// not been 14 days but i will try to test it out for when quarantine period = 1
+
 public class EndQuarantineNotificationReceiver extends BroadcastReceiver {
     private static final String CHANNEL_ID = "END_QUARANTINE_NOTIFICATION_CHANNEL";  // Unique identifier for the notification channel
 

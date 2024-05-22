@@ -10,6 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+// This is the news adapter that is needed for the news data API
+
 public class ActivityNewsAdapter extends RecyclerView.Adapter<ActivityNewsAdapter.NewsViewHolder> {
 
     // JSONArray to hold the news data

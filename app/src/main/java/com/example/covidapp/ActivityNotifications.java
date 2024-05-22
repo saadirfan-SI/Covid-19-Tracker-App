@@ -8,6 +8,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+// This class is for notifications which i wanted to be as push notifications but i had neither
+// the knowledge, the time or the resources and the mental capacity. At this point my brain is fried.
+
 public class ActivityNotifications extends AppCompatActivity {
 
     @Override

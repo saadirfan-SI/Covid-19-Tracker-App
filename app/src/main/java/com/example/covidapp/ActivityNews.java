@@ -18,6 +18,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+// This class handles the News data which is fetched through an api using retrofit
+
 public class ActivityNews extends AppCompatActivity {
 
     private RecyclerView recyclerViewNews;

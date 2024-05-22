@@ -19,6 +19,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+// This class handles the Covid Stats that gets data using an API
+
 public class ActivityStats extends AppCompatActivity {
 
     // TextView to display the total number of cases

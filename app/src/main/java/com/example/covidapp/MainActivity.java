@@ -15,6 +15,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+// This is the Login page class which handles the login functionality.
+
 public class MainActivity extends AppCompatActivity {
 
     DatabaseHelper dbHelper;

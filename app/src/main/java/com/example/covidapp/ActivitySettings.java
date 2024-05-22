@@ -10,6 +10,9 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+// This class was for the accounts setting page which should have shown the accounts created and
+// added to the database
+
 public class ActivitySettings extends AppCompatActivity {
 
     @Override

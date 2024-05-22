@@ -8,6 +8,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+// This class is basically for the "Order Test" but it rquires further work
+
 public class ActivityInbox extends AppCompatActivity {
 
     @Override

@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+// This class handles the sign up page where you can create your account
+
 public class ActivitySignUp extends AppCompatActivity {
 
     EditText etUser, etEmail, etPass;

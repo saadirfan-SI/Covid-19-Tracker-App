@@ -32,6 +32,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Calendar;
 
+// This class handles the dashboard and where the bulk of the code is so Good Luck going through it
+// I'm sorry it's a lot but i dont have a lot of experience in code management so i put the bulk here :)
 
 public class ActivityDashboard extends AppCompatActivity {
 

@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Build;
 import androidx.core.app.NotificationCompat;
 
+// This class handles the daily notifications for when you are in quarantine
+
 public class QuarantineNotificationReceiver extends BroadcastReceiver {
     private static final String CHANNEL_ID = "QUARANTINE_NOTIFICATION_CHANNEL";  // Unique identifier for the notification channel
 

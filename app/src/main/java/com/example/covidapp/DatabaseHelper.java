@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+// This class is bassically for the database
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     // Database Information
     public static final String DBName = "register.db";
