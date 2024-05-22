@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class ActivitySettings extends AppCompatActivity {
 
@@ -20,5 +22,10 @@ public class ActivitySettings extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // RecyclerView initialization
+        RecyclerView recyclerViewAccounts = findViewById(R.id.recyclerViewAccounts);
+        recyclerViewAccounts.setLayoutManager(new LinearLayoutManager(this));
+        // Set adapter to recyclerViewAccounts if you have one
     }
 }

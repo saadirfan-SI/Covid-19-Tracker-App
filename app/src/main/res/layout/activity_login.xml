@@ -70,6 +70,15 @@
                 android:textColorHint="#756C6C" />
 
             <ImageView
+                android:id="@+id/imageView3Button"
+                android:layout_width="41dp"
+                android:layout_height="33dp"
+                android:layout_gravity="left"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                app:srcCompat="@drawable/btn_arraw1" />
+
+            <ImageView
                 android:id="@+id/imageView2Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

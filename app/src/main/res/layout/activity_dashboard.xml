@@ -225,7 +225,7 @@
                             android:background="@drawable/white_background">
 
                             <ImageView
-                                android:id="@+id/imageViewInbox"
+                                android:id="@+id/imageViewCovidTest"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
@@ -241,11 +241,11 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <TextView
-                            android:id="@+id/textViewInbox"
+                            android:id="@+id/textViewCovidTest"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="Inbox"
+                            android:text="Order Test"
                             android:textAlignment="center"
                             android:textColor="@android:color/holo_orange_dark"
                             android:textSize="14sp"

@@ -30,9 +30,6 @@
             android:name=".ActivitySettings"
             android:exported="false" />
         <activity
-            android:name=".ActivityAdvice"
-            android:exported="false" />
-        <activity
             android:name=".ActivityInbox"
             android:exported="false" />
         <activity

@@ -5,9 +5,12 @@ import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -18,8 +21,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.Manifest;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -27,6 +34,9 @@ import java.util.Calendar;
 
 
 public class ActivityDashboard extends AppCompatActivity {
+
+    private static final int REQUEST_LOCATION_PERMISSION = 100;
+    private static final int REQUEST_LOCATION_SERVICES = 100;
 
     public static final int QUARANTINE_DAYS = 14;
     public static final int DAILY_REMINDER_REQUEST_CODE = 100;
@@ -222,74 +232,42 @@ public class ActivityDashboard extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("ActivityDashboard", "Maps image clicked");
-
-
-                // Intent to open Google Maps with a search query for nearby health facilities
-                Uri gmmIntentUri = Uri.parse("geo:0,0?q=health+facilities+near+me");
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                mapIntent.setPackage("com.google.android.apps.maps");
-
-                // Check if there is an app that can handle the intent
-                if (mapIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(mapIntent);
-                } else {
-                    // Fallback to open in a web browser
-                    Uri webUri = Uri.parse("https://www.google.com/maps/search/?api=1&query=health+facilities+near+me");
-                    Intent webIntent = new Intent(Intent.ACTION_VIEW, webUri);
-                    startActivity(webIntent);
-                }
+                requestLocationPermissionAndOpenMap();
             }
         });
-
 
         TextView txtMaps = findViewById(R.id.textViewMaps);
         txtMaps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("ActivityDashboard", "Maps text clicked");
-
-                // Intent to open Google Maps with a search query for nearby health facilities
-                Uri gmmIntentUri = Uri.parse("geo:0,0?q=health+facilities+near+me");
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                mapIntent.setPackage("com.google.android.apps.maps");
-
-                // Check if there is an app that can handle the intent
-                if (mapIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(mapIntent);
-                } else {
-                    // Fallback to open in a web browser
-                    Uri webUri = Uri.parse("https://www.google.com/maps/search/?api=1&query=health+facilities+near+me");
-                    Intent webIntent = new Intent(Intent.ACTION_VIEW, webUri);
-                    startActivity(webIntent);
-                }
+                requestLocationPermissionAndOpenMap();
             }
         });
 
 
-// Inbox
-        // This code block is for the "inbox" image which, when clicked, takes you to the inbox
-        // activity page
-        ImageView imgInbox = findViewById(R.id.imageViewInbox);
-        imgInbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("ActivityDashboard", "Inbox image clicked");
-                Intent toInboxPage = new Intent(ActivityDashboard.this, ActivityInbox.class);
-                startActivity(toInboxPage);
-            }
-        });
+// Covid test
+        // This code block is for the "Covid test" image which, when clicked, takes you to the Amazon link to order a lateral flow test kit
+                ImageView imgCovidTest = findViewById(R.id.imageViewCovidTest);
+                imgCovidTest.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d("ActivityDashboard", "Covid test image clicked");
+                        Intent toCovidTestPage = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.amazon.co.uk/lateral-flow-test-kit/s?k=lateral+flow+test+kit"));
+                        startActivity(toCovidTestPage);
+                    }
+                });
 
-        // This code block is for the "inbox" text which, when clicked, takes you to the inbox
-        // activity page
-        TextView txtInbox = findViewById(R.id.textViewInbox);
-        txtInbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("ActivityDashboard", "Inbox text clicked");
-                Intent toInboxPage2 = new Intent(ActivityDashboard.this, ActivityInbox.class);
-                startActivity(toInboxPage2);
-            }
-        });
+        // This code block is for the "Covid test" text which, when clicked, takes you to the Amazon link to order a lateral flow test kit
+                TextView txtCovidTest = findViewById(R.id.textViewCovidTest);
+                txtCovidTest.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d("ActivityDashboard", "Covid test text clicked");
+                        Intent toCovidTestPage2 = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.amazon.co.uk/lateral-flow-test-kit/s?k=lateral+flow+test+kit"));
+                        startActivity(toCovidTestPage2);
+                    }
+                });
 
 // Stats
         // This code block is for the "stats" image which, when clicked, takes you to the stats
@@ -419,6 +397,8 @@ public class ActivityDashboard extends AppCompatActivity {
         });
     }
 
+// Handles quarantine period management and schedules reminders
+
     private void startQuarantinePeriod() {
         Calendar startDate = Calendar.getInstance();
         Calendar endDate = Calendar.getInstance();
@@ -461,32 +441,121 @@ public class ActivityDashboard extends AppCompatActivity {
         }
     }
 
+    // Method to schedule the reminder for the end of quarantine
     private void scheduleEndOfQuarantineReminder() {
+        // Get the system's AlarmManager service
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        // Get the current time and create a Calendar instance
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
+
+        // Add the duration of quarantine to the current time
         calendar.add(Calendar.DAY_OF_YEAR, QUARANTINE_DAYS);
-        calendar.set(Calendar.HOUR_OF_DAY, 9); // Set the time to 9 AM
+
+        // Set the time for the reminder to 9 AM
+        calendar.set(Calendar.HOUR_OF_DAY, 9);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
 
+        // Create an Intent to broadcast the reminder
         Intent intent = new Intent(this, EndQuarantineNotificationReceiver.class);
+
+        // Create a PendingIntent for the broadcast
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, END_QUARANTINE_REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // Schedule the alarm to trigger at the specified time
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        // Save the state of the 'isQuarantineStarted' variable in the bundle
         outState.putBoolean("isQuarantineStarted", isQuarantineStarted);
     }
+
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        // Restore the state of the 'isQuarantineStarted' variable from the saved instance state
         isQuarantineStarted = savedInstanceState.getBoolean("isQuarantineStarted", false);
     }
 
-}
 
+// For Maps to handle permissions and launching Google Maps for nearby health facilities
+    // Method to request location permission and open map
+    
+    private void requestLocationPermissionAndOpenMap() {
+        // Check if the location permission is not granted
+        if (ContextCompat.checkSelfPermission(ActivityDashboard.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted, ask for permission
+            ActivityCompat.requestPermissions(ActivityDashboard.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
+        } else {
+            // Permission is already granted, check if location services are enabled
+            checkLocationServicesAndOpenMap();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // Check if the request code matches the location permission request code
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            // Check if the permission is granted
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, check if location services are enabled
+                checkLocationServicesAndOpenMap();
+            } else {
+                // Permission denied, show a message or handle accordingly
+                Toast.makeText(this, "Location permission denied. Map functionality disabled.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    // Method to check if location services are enabled and open map
+    private void checkLocationServicesAndOpenMap() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        if (!isGPSEnabled && !isNetworkEnabled) {
+            // Location services are not enabled, prompt the user to enable them
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivityForResult(intent, REQUEST_LOCATION_SERVICES);
+        } else {
+            // Location services are enabled, open map
+            openMap();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Check if the request code matches the location services request code
+        if (requestCode == REQUEST_LOCATION_SERVICES) {
+            // Check if location services are enabled now
+            checkLocationServicesAndOpenMap();
+        }
+    }
+
+    // Method to open Google Maps with a search query for nearby health facilities
+    private void openMap() {
+        // Intent to open Google Maps with a search query for nearby health facilities
+        Uri gmmIntentUri = Uri.parse("geo:0,0?q=health+facilities+near+me");
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+
+        // Check if there is an app that can handle the intent
+        if (mapIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(mapIntent);
+        } else {
+            // Fallback to open in a web browser
+            Uri webUri = Uri.parse("https://www.google.com/maps/search/?api=1&query=health+facilities+near+me");
+            Intent webIntent = new Intent(Intent.ACTION_VIEW, webUri);
+            startActivity(webIntent);
+        }
+    }
+}
 
