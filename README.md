@@ -28,8 +28,8 @@ The COVID-19 Tracker App is designed to provide users with essential information
 - Retrofit
 
 ## Testing
--Unit tests using JUnit framework ensure the functionality and reliability of critical components within the app.
--Orientation was also set for some of the classes to avoid disorganised content
+- Unit tests using JUnit framework ensure the functionality and reliability of critical components within the app.
+- Orientation was also set for some of the classes to avoid disorganised content
 
 ## Contributors
 - [Saad Irfan](https://github.com/saadirfan-SI)
